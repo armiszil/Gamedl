@@ -1,2 +1,4 @@
-package com.project.gamedl.controllers;public class controller {
+package com.project.gamedl.controllers;
+
+public class Controller {
 }
