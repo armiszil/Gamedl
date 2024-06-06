@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
-  db:
-    container_name: gamedl_db
+  mysql:
+    container_name: gamedl_db_container
     image: mysql:latest
     ports:
       - "3306:3306"
@@ -12,7 +10,4 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     volumes:
-      - db_data:/var/lib/mysql
-
-volumes:
-  db_data:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
