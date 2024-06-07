@@ -4,10 +4,10 @@ services:
     image: mysql:latest
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: gamedl_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
+    env_file:
+      - ./env_vars
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      -  gamedl_db_files:/var/lib/mysql
+volumes:
+  gamedl_db_files:
