@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/characters")
@@ -34,4 +35,15 @@ public class CharacterController {
 
         return new ResponseEntity<>(characterModels, HttpStatus.OK);
     }
+    @GetMapping("/random")
+    public ResponseEntity<CharacterModel> getRandomCharacter(){
+        Optional<Character> randomCharacter=characterService.getRandomCharacter();
+        if(randomCharacter.isEmpty()){return new ResponseEntity<>(new CharacterModel(),HttpStatus.NOT_FOUND);}
+
+
+       return new ResponseEntity<>(conversionService.convert(randomCharacter.get(),CharacterModel.class),HttpStatus.OK);
+    }
+
+
+
 }
