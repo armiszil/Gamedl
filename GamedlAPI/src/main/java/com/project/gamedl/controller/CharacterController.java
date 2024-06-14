@@ -37,11 +37,19 @@ public class CharacterController {
     }
     @GetMapping("/random")
     public ResponseEntity<CharacterModel> getRandomCharacter(){
-        Optional<Character> randomCharacter=characterService.getRandomCharacter();
-        if(randomCharacter.isEmpty()){return new ResponseEntity<>(new CharacterModel(),HttpStatus.NOT_FOUND);}
+        Optional<Character> optionalCharacter = characterService.getRandomCharacter();
+        if(optionalCharacter.isEmpty()) {
+            return new ResponseEntity<>(new CharacterModel(),HttpStatus.NOT_FOUND);
+        }
+
+        CharacterModel randomCharacterModel = conversionService.convert(optionalCharacter.get(), CharacterModel.class);
+        return new ResponseEntity<>(randomCharacterModel,HttpStatus.OK);
 
 
-       return new ResponseEntity<>(conversionService.convert(randomCharacter.get(),CharacterModel.class),HttpStatus.OK);
+
+
+
+
     }
 
 
