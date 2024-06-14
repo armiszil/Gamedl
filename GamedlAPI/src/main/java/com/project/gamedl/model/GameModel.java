@@ -1,10 +1,12 @@
 package com.project.gamedl.model;
 
+import com.project.gamedl.domain.Genre;
+
 import java.util.Date;
 
 public class GameModel {
     private String name;
-    private String genre;
+    private Genre genre;
     private String franchiseName;
     private Date releaseDate;
 
@@ -16,11 +18,11 @@ public class GameModel {
         this.name = name;
     }
 
-    public String getGenre() {
+    public Genre getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(Genre genre) {
         this.genre = genre;
     }
 

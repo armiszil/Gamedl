@@ -1,6 +1,8 @@
 package com.project.gamedl.model;
 
 import com.project.gamedl.domain.Game;
+import com.project.gamedl.domain.Gender;
+import com.project.gamedl.domain.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -9,8 +11,8 @@ import jakarta.persistence.ManyToOne;
 public class CharacterModel {
 
     private String name;
-    private String role;
-    private String gender;
+    private Role role;
+    private Gender gender;
     private Integer age;
     private GameModel game;
 
@@ -22,19 +24,19 @@ public class CharacterModel {
         this.name = name;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
