@@ -9,12 +9,15 @@ import jakarta.persistence.ManyToOne;
 
 
 public class CharacterModel {
-
+    private Integer id;
     private String name;
     private Role role;
     private Gender gender;
     private Integer age;
     private GameModel game;
+
+    public Integer getId() {return id;}
+    public void setId(Integer id) { this.id = id; }
 
     public String getName() {
         return name;
