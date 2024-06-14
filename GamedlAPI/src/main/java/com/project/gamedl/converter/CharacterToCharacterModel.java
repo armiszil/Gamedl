@@ -14,6 +14,7 @@ public class CharacterToCharacterModel implements Converter<Character, Character
     public CharacterModel convert(Character source) {
         CharacterModel characterModel = new CharacterModel();
 
+        characterModel.setId(source.getId());
         characterModel.setName(source.getName());
         characterModel.setAge(source.getAge());
         characterModel.setGame(gameConverter.convert(source.getGame()));

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name",nullable = false)
     private String name;
@@ -24,11 +24,11 @@ public class Character {
     @JoinColumn(name = "game_id_fk", nullable = false)
     private Game game;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
