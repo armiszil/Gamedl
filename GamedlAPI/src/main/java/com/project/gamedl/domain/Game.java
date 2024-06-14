@@ -15,7 +15,8 @@ public class Game {
         private String name;
 
         @Column(name = "genre",nullable = false)
-        private String genre;
+        @Enumerated(EnumType.STRING)
+        private Genre genre;
 
         @Column(name ="franchise_name",nullable = false)
         private String franchiseName;
@@ -42,11 +43,11 @@ public class Game {
             this.name = name;
         }
 
-        public String getGenre() {
+        public Genre getGenre() {
             return genre;
         }
 
-        public void setGenre(String genre) {
+        public void setGenre(Genre genre) {
             this.genre = genre;
         }
 
