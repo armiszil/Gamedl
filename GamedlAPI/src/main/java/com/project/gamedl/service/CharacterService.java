@@ -24,12 +24,6 @@ public class CharacterService {
 
 
     public Optional<Character> getRandomCharacter() {
-        long count = characterRepository.count();
-        if (count == 0) {
-            return Optional.empty();
-        }
-        Random random = new Random();
-        long randomId = random.nextInt((int) count) + 1;
-        return characterRepository.findById(randomId);
+        return characterRepository.getRandomCharacter();
     }
 }
