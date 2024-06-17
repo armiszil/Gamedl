@@ -12,9 +12,6 @@ function Header(){
                 <a href="#">LeaderBoard</a>
             </nav>
         </header>
-
-
-
     );
 }
 
