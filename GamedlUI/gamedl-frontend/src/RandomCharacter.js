@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { deepEqualsWithResult } from './deepEqualsWithReport';
+import GuessesList from './GuessesList';
 
-function RandomCharacter() {
+export default function RandomCharacter() {
     const [character, setCharacter] = useState(null);
     const [error, setError] = useState(null);
     const [isGuessing, setIsGuessing] = useState(false);
@@ -9,6 +11,8 @@ function RandomCharacter() {
     const [message, setMessage] = useState('');
     const [allCharacters, setAllCharacters] = useState([]);
     const [filteredCharacters, setFilteredCharacters] = useState([]);
+    const [guessedCharacters, setGuessedCharacters] = useState([]);
+
 
     useEffect(() => {
         axios.get('http://localhost:8080/api/characters')
@@ -18,7 +22,7 @@ function RandomCharacter() {
             .catch(error => {
                 console.error('Error fetching characters:', error);
             });
-    }, []);
+    },[]);
 
     const fetchRandomCharacter = () => {
         axios.get('http://localhost:8080/api/characters/random')
@@ -50,12 +54,29 @@ function RandomCharacter() {
     };
 
     const handleGuessSubmit = () => {
-        if (guess.toLowerCase() === character.name.toLowerCase()) {
-            setMessage('Correct! You guessed the character.');
+        const foundCharacter = allCharacters.find(x => {
+            return x.name.toLowerCase() === guess.toLowerCase();
+        });
+
+        if(foundCharacter){
+            console.log(foundCharacter);
+            const result = deepEqualsWithResult(character,foundCharacter);
+            setGuessedCharacters(guessedCharacters => {
+                return [...guessedCharacters,{id : crypto.randomUUID(),character : foundCharacter, results : result}];
+            })
+
+            console.log(guessedCharacters);
+            
+            if (character.name.toLowerCase() === foundCharacter.name.toLowerCase()) {
+                setMessage('Correct! You guessed the character.');
+            } else {
+                setMessage('Incorrect. Try again.');
+            }
         } else {
-            setMessage('Incorrect. Try again.');
+            setMessage(`Incorrect, "${guess}" is not valid character.`)
         }
     };
+
 
     const handleGenerateNewCharacter = () => {
         setIsGuessing(false);
@@ -70,7 +91,7 @@ function RandomCharacter() {
     };
 
     return (
-        <div>
+        <>
             {!isGuessing && (
                 <button onClick={fetchRandomCharacter}>Start Guessing!!</button>
             )}
@@ -99,6 +120,7 @@ function RandomCharacter() {
                     </div>
                 </div>
             )}
+            <GuessesList guessedCharacters={guessedCharacters}/>
             {character && ( //just for testing rn
                 <div>
                     <h1>Character Info (for testing):</h1>
@@ -109,8 +131,6 @@ function RandomCharacter() {
                     <p>Game: {character.game.name}</p>
                 </div>
             )}
-        </div>
+        </>
     );
 }
-
-export default RandomCharacter;

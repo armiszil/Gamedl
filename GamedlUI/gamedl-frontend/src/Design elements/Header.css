@@ -2,8 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #4CAF50;
+    padding: 0px 20px 0px 20px;
+    
+    background-color: #47a54a;
     color: white;
   }
   
