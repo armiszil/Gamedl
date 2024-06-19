@@ -1,9 +1,11 @@
 import GuessesListItem from "./GuessesListItem";
 
 export default function GuessesList({ guessedCharacters }){
-    return (<table>
+    return (
+            <table>
                 <thead>
                     <tr>
+                        <th>Name</th>
                         <th>Role</th>
                         <th>Age</th>
                         <th>Gender</th>

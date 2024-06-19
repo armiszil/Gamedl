@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+input {
+  border: none;
+  outline: none;
+}
+
 .badProp {
   background-color: red;
 }
