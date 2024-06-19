@@ -60,19 +60,16 @@ export default function RandomCharacter() {
         setGuess(event.target.value);
     };
 
-    const handleGuessSubmit = () => {
+    const handleGuessSubmit = (e) => {
         const foundCharacter = allCharacters.find(x => {
-            return x.name.toLowerCase() === guess.toLowerCase();
+            return x.name.toLowerCase() === e.target.textContent.toLowerCase();
         });
 
         if(foundCharacter){
-            console.log(foundCharacter);
             const result = deepEqualsWithResult(character,foundCharacter);
             setGuessedCharacters(guessedCharacters => {
                 return [...guessedCharacters,{id : crypto.randomUUID(),character : foundCharacter, results : result}];
             })
-
-            console.log(guessedCharacters);
             
             if (character.name.toLowerCase() === foundCharacter.name.toLowerCase()) {
                 setMessage('Correct! You guessed the character.');
@@ -110,12 +107,11 @@ export default function RandomCharacter() {
                         onChange={handleGuessChange}
                         placeholder="Guess the character"
                     />
-                    <button onClick={handleGuessSubmit}>Submit Guess</button>
                     {message && <div>{message}</div>}
                     {filteredCharacters.length > 0 && (
                         <ul>
                             {filteredCharacters.map((char, index) => (
-                                <li key={index} onClick={() => handleSuggestionClick(char.name)}>
+                                <li key={index} onClick={handleGuessSubmit}>
                                     {char.name}
                                 </li>
                             ))}

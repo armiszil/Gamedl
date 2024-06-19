@@ -1,8 +1,7 @@
 import GuessesListItem from "./GuessesListItem";
 
 export default function GuessesList({ guessedCharacters }){
-    return ( 
-            <table>
+    return (<table>
                 <thead>
                     <tr>
                         <th>Role</th>
@@ -17,10 +16,10 @@ export default function GuessesList({ guessedCharacters }){
                 <tbody>
                 {guessedCharacters.map(gussedCharacter => {
                     return (
-                        <GuessesListItem guessItem={gussedCharacter}/>
+                        <GuessesListItem key={gussedCharacter.id} guessItem={gussedCharacter}/>
                     )
                 })}
                 </tbody>
             </table>
-        )
+    )  
 }
