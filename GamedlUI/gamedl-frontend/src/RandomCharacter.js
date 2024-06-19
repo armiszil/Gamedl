@@ -13,10 +13,19 @@ export default function RandomCharacter() {
     const [filteredCharacters, setFilteredCharacters] = useState([]);
     const [guessedCharacters, setGuessedCharacters] = useState([]);
 
+    useEffect(() => {
+        fetchAllCharacters(setAllCharacters)
+    }, []);
 
     useEffect(() => {
-        fetchAllCharacters(setAllCharacters);
-    },[]);
+        setFilteredCharacters([]);
+        if(guess !== ''){
+            const filteredCharacters = allCharacters.filter(character => {
+                return character.name.toLowerCase().includes(guess.toLowerCase());
+            });
+            setFilteredCharacters(filteredCharacters);
+        }
+    }, [guess])
 
     const fetchAllCharacters = async () => {
         await axios.get('http://localhost:8080/api/characters')
@@ -48,15 +57,7 @@ export default function RandomCharacter() {
     
 
     const handleGuessChange = (event) => {
-        const userInput = event.target.value;
-        setGuess(userInput);
-
-        if (userInput){
-        const filtered = allCharacters.filter(char =>
-            char.name.toLowerCase().startsWith(userInput.toLowerCase())
-        );
-        setFilteredCharacters(filtered);}
-        else{setFilteredCharacters([]);}
+        setGuess(event.target.value);
     };
 
     const handleGuessSubmit = () => {
