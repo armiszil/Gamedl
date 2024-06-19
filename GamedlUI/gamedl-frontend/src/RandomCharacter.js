@@ -15,15 +15,19 @@ export default function RandomCharacter() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/characters')
+        fetchAllCharacters(setAllCharacters);
+    },[]);
+
+    const fetchAllCharacters = async () => {
+        await axios.get('http://localhost:8080/api/characters')
             .then(response => {
                 setAllCharacters(response.data);
             })
             .catch(error => {
                 console.error('Error fetching characters:', error);
             });
-    },[]);
-
+    }
+    
     const fetchRandomCharacter = () => {
         axios.get('http://localhost:8080/api/characters/random')
             .then(response => {
@@ -40,6 +44,8 @@ export default function RandomCharacter() {
                 setIsGuessing(false);
             });
     };
+
+    
 
     const handleGuessChange = (event) => {
         const userInput = event.target.value;
@@ -79,10 +85,9 @@ export default function RandomCharacter() {
 
 
     const handleGenerateNewCharacter = () => {
-        setIsGuessing(false);
-        setCharacter(null); // Reset the character
-        setFilteredCharacters([]); // Clear filtered characters
-        setMessage(''); // Clear message
+        setCharacter(fetchRandomCharacter());
+        setFilteredCharacters([]);
+        setGuessedCharacters([]);
     };
 
     const handleSuggestionClick = (suggestion) => {
@@ -93,7 +98,7 @@ export default function RandomCharacter() {
     return (
         <>
             {!isGuessing && (
-                <button onClick={fetchRandomCharacter}>Start Guessing!!</button>
+                <button onClick={handleGenerateNewCharacter}>Start Guessing!!</button>
             )}
             {error && <div>{error}</div>}
             {isGuessing && (
