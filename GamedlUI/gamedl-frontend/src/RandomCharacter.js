@@ -126,17 +126,11 @@ export default function RandomCharacter() {
                     </div>
                 </div>
             )}
-            <GuessesList guessedCharacters={guessedCharacters}/>
-            {character && ( //just for testing rn
-                <div>
-                    <h1>Character Info (for testing):</h1>
-                    <p>Name: {character.name}</p>
-                    <p>Role: {character.role}</p>
-                    <p>Gender: {character.gender}</p>
-                    <p>Age: {character.age}</p>
-                    <p>Game: {character.game.name}</p>
-                </div>
-            )}
+            {guessedCharacters.length !== 0 && (
+                    <GuessesList guessedCharacters={guessedCharacters}/>
+                )
+            }
+            
         </>
     );
 }
