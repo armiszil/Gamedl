@@ -86,12 +86,7 @@ export default function RandomCharacter() {
         setCharacter(fetchRandomCharacter());
         setFilteredCharacters([]);
         setGuessedCharacters([]);
-    };
-
-    const handleSuggestionClick = (suggestion) => {
-        setGuess(suggestion);
-        setFilteredCharacters([]);
-    };
+    };  
 
     return (
         <>
