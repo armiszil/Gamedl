@@ -68,30 +68,31 @@ export default function RandomCharacter() {
             return x.name.toLowerCase() === e.target.textContent.toLowerCase();
         });
 
-        if(foundCharacter){
-            const result = deepEqualsWithResult(character,foundCharacter);
-            setGuessedCharacters(guessedCharacters => {
-                return [...guessedCharacters,{id : crypto.randomUUID(),character : foundCharacter, results : result}];
-            })
-            
-            if (character.name.toLowerCase() === foundCharacter.name.toLowerCase()) {
-                setMessage('Correct! You guessed the character.');
-            } else {
-                setMessage('Incorrect. Try again.');
-            }
-        } else {
+        if(!foundCharacter){
             setMessage(`Incorrect, "${guess}" is not valid character.`)
+            return;
         }
+        const result = deepEqualsWithResult(character,foundCharacter);
+        addsCharacterToGuessedCharactersAndSetsMessages(foundCharacter,result);
     };
 
-    // These function need a unification meaning substracting the functions from inside
+    const addsCharacterToGuessedCharactersAndSetsMessages = (newCharacter,result) => {
+        setGuessedCharacters(guessedCharacters => {
+            return [...guessedCharacters,{id : crypto.randomUUID(),character : newCharacter, results : result}];
+        })
+        setGuess("");
+            
+        if (character.name.toLowerCase() === newCharacter.name.toLowerCase()) {
+            setMessage('Correct! You guessed the character.');
+        } else {
+            setMessage('Incorrect. Try again.');
+        }
+    }
 
     const handleGuessOnEnter = () => {
         const selectedCharacter = filteredCharacters[selectedGuess]
         const result = deepEqualsWithResult(character, selectedCharacter);
-        setGuessedCharacters(guessedCharacters => {
-            return [...guessedCharacters,{id : crypto.randomUUID(),character : selectedCharacter, results : result}];
-        })
+        addsCharacterToGuessedCharactersAndSetsMessages(selectedCharacter,result);
     }
 
 
@@ -105,10 +106,13 @@ export default function RandomCharacter() {
         if(e.key === "ArrowUp" && selectedGuess > 0) {
             e.preventDefault();
             setSelectedGuess(prev => prev - 1)
-        }
+        } 
         else if(e.key  === "ArrowDown" && selectedGuess < filteredCharacters.length - 1){
             e.preventDefault();
             setSelectedGuess(prev => prev + 1)
+        } 
+        else if(e.key === "ArrowUp" || e.key === "ArrowDown"){
+            e.preventDefault();
         }
         else if(e.key === "Enter" && selectedGuess >= 0){
             handleGuessOnEnter();
@@ -132,7 +136,7 @@ export default function RandomCharacter() {
                             placeholder="Type character name"
                             onKeyDown={handleKeyDown}
                         />
-                        {message && <div>{message}</div>}
+                        {message && <span>{message}</span>}
                         {filteredCharacters.length > 0 && (
                             <ul className="search_result">
                                 {filteredCharacters.map((char, index) => (
