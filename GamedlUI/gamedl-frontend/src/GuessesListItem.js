@@ -1,9 +1,9 @@
 import "./index.css"
 
 export default function GuessesListItem( { guessItem } ){
-    console.log(guessItem);
     return (
-        <tr key={guessItem.id}>
+        <tr>
+            <td className={guessItem.results.name ? "goodProp" : "badProp"}>{guessItem.character.name}</td>
             <td className={guessItem.results.role ? "goodProp" : "badProp"}>{guessItem.character.role}</td>
             <td className={guessItem.results.age ? "goodProp" : "badProp"}>{guessItem.character.age}</td>
             <td className={guessItem.results.gender ? "goodProp" : "badProp"}>{guessItem.character.gender}</td>
