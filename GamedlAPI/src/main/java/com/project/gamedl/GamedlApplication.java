@@ -8,10 +8,7 @@ import org.w3c.dom.ls.LSOutput;
 
 @SpringBootApplication
 public class GamedlApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(GamedlApplication.class, args);
 	}
-
-
 }
