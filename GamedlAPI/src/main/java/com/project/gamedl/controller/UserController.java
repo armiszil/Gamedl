@@ -2,8 +2,13 @@ package com.project.gamedl.controller;
 
 import com.project.gamedl.domain.User;
 import com.project.gamedl.service.UserService;
+import com.project.gamedl.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -15,11 +20,24 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
+    }
+
+    @GetMapping("/protected")
+    public ResponseEntity<?> getProtectedResource() {
+        return ResponseEntity.ok("This is a protected resource. You are authenticated!");
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
@@ -34,18 +52,27 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
-        User existingUser = userService.findUserByUsername(user.getUsername());
-        if (existingUser == null) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+            String token = jwtUtil.generateToken(user.getUsername());
+            return ResponseEntity.ok(new JwtResponse(token));
+        } catch (AuthenticationException e) {
+            logger.error("Login failed for user: {}", user.getUsername(), e);
             return ResponseEntity.badRequest().body("Invalid username or password!");
         }
+    }
 
-        boolean passwordMatch = passwordEncoder.matches(user.getPassword(), existingUser.getPassword());
-        if (!passwordMatch) {
-            logger.info("Password mismatch for user: {}", user.getUsername());
-            return ResponseEntity.badRequest().body("Invalid username or password!");
+    public static class JwtResponse {
+        private final String token;
+
+        public JwtResponse(String token) {
+            this.token = token;
         }
 
-        logger.info("Login successful for user: {}", user.getUsername());
-        return ResponseEntity.ok("Login successful!");
+        public String getToken() {
+            return token;
+        }
     }
 }
